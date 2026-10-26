@@ -119,6 +119,225 @@
       main>.count-section,main>.events-section,main>.locations-section {background-color:rgba(255,247,246,.08);}
     }
 
+    
+/* Larger, elegant wedding envelope */
+.intro-gate {
+  padding: 18px 22px;
+  background: radial-gradient(
+    ellipse at 50% 38%,
+    #fffdf8 0%,
+    #ffebe9 57%,
+    #f6d6de 100%
+  );
+}
+
+.envelope-scene {
+  --env-scale: 1.36;
+  width: calc(290px * var(--env-scale));
+  height: calc(220px * var(--env-scale));
+  margin: 27px 0 18px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 22px 27px rgba(131,57,78,.27));
+}
+
+.envelope-stage {
+  width: 290px;
+  height: 220px;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%) scale(var(--env-scale));
+  transform-origin: 50% 100%;
+  perspective: 1000px;
+}
+
+.envelope-letter {
+  transition:
+    transform 1.03s .37s cubic-bezier(.16,.86,.18,1),
+    box-shadow 1.02s ease;
+  backface-visibility: hidden;
+}
+
+.envelope-flap {
+  transition:
+    transform .74s cubic-bezier(.2,.78,.23,1),
+    z-index 0s .34s;
+}
+
+.seal {
+  transition:
+    transform .4s cubic-bezier(.18,.89,.32,1.36),
+    opacity .4s ease;
+}
+
+.intro-gate.opening .seal {
+  transform: scale(1.55) rotate(12deg);
+  opacity: 0;
+}
+
+.intro-gate.opening .envelope-letter {
+  transform: translateY(-121px) rotate(-2.5deg) scale(1.045);
+  box-shadow: 0 24px 42px rgba(166,92,112,.27);
+}
+
+.intro-gate.opening .envelope-scene {
+  animation: envelopeElegantExit 1.9s ease-in-out both;
+}
+
+@keyframes envelopeElegantExit {
+  0%, 60% { transform: translateY(0) scale(1); }
+  82% { transform: translateY(-4px) scale(1.015); }
+  100% {
+    transform: translateY(13px) scale(.95);
+    opacity: .85;
+  }
+}
+
+/* Glowing halo */
+.envelope-scene::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 42%;
+  border: 1px solid transparent;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-gate.opening .envelope-scene::before {
+  animation: envelopeHalo 1.45s .08s ease-out forwards;
+}
+
+@keyframes envelopeHalo {
+  10% {
+    opacity: .7;
+    border-color: rgba(190,126,140,.45);
+    transform: scale(.83);
+  }
+  68% {
+    opacity: .3;
+    transform: scale(1.26);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.38);
+  }
+}
+
+/* Golden sparkle particles */
+.envelope-glints {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.envelope-glints i {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  left: 50%;
+  top: 46%;
+  opacity: 0;
+  background: #d5aa70;
+  transform: translate(-50%,-50%) scale(.05) rotate(45deg);
+  box-shadow: 0 0 14px #eec595;
+  clip-path: polygon(
+    50% 0%,61% 39%,100% 50%,61% 61%,
+    50% 100%,39% 61%,0 50%,39% 39%
+  );
+}
+
+.envelope-glints i:nth-child(1) {
+  --x:-155px;--y:-80px;--delay:.15s;
+}
+.envelope-glints i:nth-child(2) {
+  --x:158px;--y:-92px;--delay:.29s;
+}
+.envelope-glints i:nth-child(3) {
+  --x:-138px;--y:35px;--delay:.42s;
+}
+.envelope-glints i:nth-child(4) {
+  --x:143px;--y:25px;--delay:.21s;
+}
+.envelope-glints i:nth-child(5) {
+  --x:-66px;--y:-161px;--delay:.49s;
+}
+.envelope-glints i:nth-child(6) {
+  --x:76px;--y:-161px;--delay:.33s;
+}
+
+.intro-gate.opening .envelope-glints i {
+  animation: envelopeGlint .92s var(--delay) ease-out both;
+}
+
+@keyframes envelopeGlint {
+  0% {
+    opacity: 0;
+    transform: translate(-50%,-50%) scale(.1) rotate(0);
+  }
+  38% { opacity: .95; }
+  75% { opacity: .7; }
+  100% {
+    opacity: 0;
+    transform:
+      translate(calc(-50% + var(--x)),calc(-50% + var(--y)))
+      scale(1.1) rotate(100deg);
+  }
+}
+
+.intro-gate.opening .gate-overline,
+.intro-gate.opening .gate-heading,
+.intro-gate.opening .gate-sub {
+  opacity: 0;
+  transition: opacity .24s ease;
+  pointer-events: none;
+}
+
+/* Responsive envelope sizing */
+@media (max-width:540px) {
+  .envelope-scene {
+    --env-scale:1.17;
+    margin:22px 0 15px;
+  }
+  .gate-sub { margin:12px 0 15px; }
+  .gate-heading { font-size:clamp(42px,11vw,55px); }
+  .gate-hint { margin-top:13px; }
+}
+
+@media (max-width:375px) {
+  .envelope-scene {
+    --env-scale:1.075;
+    margin:18px 0 12px;
+  }
+  .gate-heading { font-size:clamp(40px,11vw,48px); }
+  .gate-sub { font-size:20px;margin-bottom:12px; }
+}
+
+@media (max-width:335px) {
+  .envelope-scene { --env-scale:1; }
+}
+
+@media (max-height:690px) {
+  .intro-gate { padding:12px 17px; }
+  .envelope-scene { margin-top:10px;margin-bottom:7px; }
+  .gate-sub { margin-top:8px;margin-bottom:10px; }
+  .gate-hint { margin-top:9px; }
+}
+
+@media (max-height:580px) and (min-width:541px) {
+  .envelope-scene { --env-scale:1.13; }
+  .gate-heading { font-size:46px; }
+  .gate-sub { font-size:19px; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .intro-gate.opening .envelope-glints,
+  .intro-gate.opening .envelope-scene::before {
+    display:none;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -151,7 +370,37 @@
     <p class="gate-overline">Something beautiful awaits</p>
     <h1 class="gate-heading">A special invitation</h1>
     <p class="gate-sub">Made with love, just for you</p>
-    <div class="envelope-scene" aria-hidden="true"><div class="envelope-back"></div><div class="envelope-letter"><b>Dipak &amp; Trupti</b><small>22 November 2026</small></div><div class="envelope-fold"></div><div class="envelope-front"></div><div class="envelope-flap"></div><div class="seal">♥</div></div>
+    
+<div class="envelope-scene" aria-hidden="true">
+  <div class="envelope-stage">
+    <div class="envelope-back"></div>
+
+    <div class="envelope-letter">
+      <div class="envelope-print">
+        <img
+          src="assets/envelope-photo.webp"
+          alt=""
+          width="194"
+          height="132"
+          fetchpriority="high"
+          decoding="async"
+        >
+      </div>
+      <span class="letter-emboss" aria-hidden="true">✧</span>
+    </div>
+
+    <div class="envelope-fold"></div>
+    <div class="envelope-front"></div>
+    <div class="envelope-flap"></div>
+    <div class="seal">♥</div>
+
+    <div class="envelope-glints" aria-hidden="true">
+      <i></i><i></i><i></i>
+      <i></i><i></i><i></i>
+    </div>
+  </div>
+</div>
+<div class="envelope-back"></div><div class="envelope-letter"><b>Dipak &amp; Trupti</b><small>22 November 2026</small></div><div class="envelope-fold"></div><div class="envelope-front"></div><div class="envelope-flap"></div><div class="seal">♥</div></div>
     <button class="btn gate-button" id="openInvite" type="button">Open your invitation <span aria-hidden="true">✧</span></button>
     <div class="gate-hint">Tap to see the magic unfold</div>
   </div>
@@ -356,7 +605,7 @@
             showInvitationFromTop();
             $('shareInvite').focus({preventScroll:true});
           });
-        },reducedMotion?80:1250);
+        },reducedMotion?80:1830);
       });
       // Date begins at midnight India Standard Time. The ceremony time has not yet been supplied.
       const target=new Date('2026-11-22T00:00:00+05:30').getTime();
