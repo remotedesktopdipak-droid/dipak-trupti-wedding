@@ -224,6 +224,81 @@
       .intro-section .section-wrap:before,.intro-section .section-wrap:after{transition:none}
     }
 
+  
+    /* FINAL POLISH: clean, readable names and a properly centred ampersand.
+       The previous background-clipped gradient/text-shadow produced ghosted lettering. */
+    main>.hero .hero-names {
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      width:100%;max-width:100%;margin:23px 0 0;gap:0;
+      font-family:Georgia,'Times New Roman',serif;
+      font-size:clamp(75px,9vw,112px);font-weight:400;
+      letter-spacing:-.052em;line-height:1.09;
+      color:#853c53;text-shadow:none;
+    }
+    main>.hero .hero-names .name {
+      display:block;width:max-content;max-width:100%;
+      color:#853c53!important;-webkit-text-fill-color:#853c53!important;
+      background:none!important;letter-spacing:-.052em;
+      line-height:1.08;animation:none!important;filter:none;
+      white-space:nowrap;text-shadow:none;
+    }
+    main>.hero .hero-names .amp {
+      font-family:Georgia,'Times New Roman',serif;
+      font-size:.43em;font-style:italic;font-weight:400;
+      color:#bc7388;-webkit-text-fill-color:#bc7388;
+      display:flex;align-items:center;justify-content:center;gap:14px;
+      margin:3px 0 4px;line-height:1.12;letter-spacing:0;
+      transform:none;white-space:nowrap;
+    }
+    main>.hero .hero-names .amp:before,
+    main>.hero .hero-names .amp:after {
+      content:'';display:block;height:1px;width:32px;
+      background:linear-gradient(90deg,transparent,#d2aa94);
+    }
+    main>.hero .hero-names .amp:after {transform:scaleX(-1)}
+    /* Subtle single warm glow across the names, without distorted gradient text. */
+    body.invitation-open main>.hero .hero-names .name {
+      animation:nameWarmGlow 1.25s .55s ease-out 1 both!important;
+    }
+    @keyframes nameWarmGlow {
+      0%{filter:brightness(1.22);opacity:.93}
+      100%{filter:brightness(1);opacity:1}
+    }
+    @media(max-width:540px){
+      main>.hero .hero-names {font-size:clamp(58px,16.4vw,82px);margin-top:17px;line-height:1.08}
+      main>.hero .hero-names .amp{font-size:.48em;gap:11px;margin:4px 0 5px}
+      main>.hero .hero-names .amp:before,main>.hero .hero-names .amp:after{width:26px}
+    }
+    @media(max-width:360px){
+      main>.hero .hero-names{font-size:clamp(52px,16.1vw,65px)}
+    }
+    /* Lightweight 3D page-flip digits for minutes and seconds only. */
+    .count-num.flip-value{display:block;position:relative;perspective:700px;isolation:isolate;
+      font-variant-numeric:tabular-nums;line-height:1.1;overflow:visible}
+    .flip-value .flip-sheet{position:absolute;left:0;right:0;height:50%;
+      display:block;overflow:hidden;backface-visibility:hidden;pointer-events:none;
+      color:var(--deep);background:#fffaf8;z-index:2;will-change:transform}
+    .flip-value .flip-face{position:absolute;left:0;width:100%;height:200%;display:flex;
+      align-items:center;justify-content:center;font:inherit;line-height:1.1;
+      font-variant-numeric:tabular-nums;white-space:nowrap}
+    .flip-value .flip-top-old{top:0;transform-origin:center bottom;
+      border-radius:6px 6px 0 0;animation:weddingFoldTop .29s ease-in forwards;z-index:4}
+    .flip-value .flip-top-old .flip-face{top:0}
+    .flip-value .flip-bottom-old{bottom:0;border-radius:0 0 6px 6px;
+      animation:weddingHideBottom .30s step-end forwards;z-index:3}
+    .flip-value .flip-bottom-old .flip-face{top:-100%}
+    .flip-value .flip-bottom-new{bottom:0;transform-origin:center top;
+      transform:rotateX(90deg);border-radius:0 0 6px 6px;
+      animation:weddingUnfoldBottom .30s .28s ease-out forwards;z-index:5}
+    .flip-value .flip-bottom-new .flip-face{top:-100%}
+    @keyframes weddingFoldTop{0%{transform:rotateX(0deg)}100%{transform:rotateX(-90deg)}}
+    @keyframes weddingHideBottom{0%,99%{opacity:1}100%{opacity:0}}
+    @keyframes weddingUnfoldBottom{0%{transform:rotateX(90deg)}100%{transform:rotateX(0deg)}}
+    @media(prefers-reduced-motion:reduce){
+      body.invitation-open main>.hero .hero-names .name{animation:none!important}
+      .flip-value .flip-sheet{display:none!important;animation:none!important}
+    }
+
   </style>
 </head>
 <body>
@@ -270,7 +345,7 @@
         <svg class="corner-svg corner-3" viewBox="0 0 230 235"><use href="#flower-sprig"/></svg><svg class="corner-svg corner-4" viewBox="0 0 230 235"><use href="#flower-sprig"/></svg>
         <div class="eyebrow">With joyful hearts &amp; endless love</div>
         <div class="hero-calligraphy">Together forever</div>
-        <h2 class="hero-names"><span>Dipak</span><span class="amp">&amp;</span><span>Trupti</span></h2>
+        <h2 class="hero-names" aria-label="Dipak and Trupti"><span class="name">Dipak</span><span class="amp" aria-hidden="true">&amp;</span><span class="name">Trupti</span></h2>
         <div class="gold-rule" aria-hidden="true"><svg class="tiny-flower" viewBox="0 0 24 24"><path d="M12 4c2-4 5 1 4 4 5-1 8 3 3 6 4 4 0 7-4 5-2 5-7 3-7-1-6 0-6-5-2-8-2-4 2-7 6-6Z" fill="currentColor"/></svg></div>
         <div class="hero-date">22 November 2026</div>
         <div class="hero-meta">Sunday · Save our date</div>
@@ -292,8 +367,8 @@
       <div class="count-grid" role="timer" aria-label="Time until wedding day">
         <div class="count-cell"><div class="count-num" id="days">--</div><div class="count-label">Days</div></div>
         <div class="count-cell"><div class="count-num" id="hours">--</div><div class="count-label">Hours</div></div>
-        <div class="count-cell"><div class="count-num" id="minutes">--</div><div class="count-label">Minutes</div></div>
-        <div class="count-cell"><div class="count-num" id="seconds">--</div><div class="count-label">Seconds</div></div>
+        <div class="count-cell"><div class="count-num flip-value" id="minutes">--</div><div class="count-label">Minutes</div></div>
+        <div class="count-cell"><div class="count-num flip-value" id="seconds">--</div><div class="count-label">Seconds</div></div>
       </div><div class="date-caption">Counting down to 22 November 2026, India time</div>
     </div></section>
 
@@ -470,9 +545,40 @@
       });
       // Date begins at midnight India Standard Time. The ceremony time has not yet been supplied.
       const target=new Date('2026-11-22T00:00:00+05:30').getTime();
-      function tick(){const delta=Math.max(0,target-Date.now());const days=Math.floor(delta/86400000);const hours=Math.floor(delta/3600000)%24;const mins=Math.floor(delta/60000)%60;const secs=Math.floor(delta/1000)%60;
-        $('days').textContent=days.toString();$('hours').textContent=String(hours).padStart(2,'0');$('minutes').textContent=String(mins).padStart(2,'0');$('seconds').textContent=String(secs).padStart(2,'0');
-      }tick();setInterval(tick,1000);
+      // Animate only minute/second changes: the older half of each number folds away
+      // while the next number unfolds, like a small calendar page.
+      function updateFlipDigit(id,next){
+        const el=$(id);
+        const previous=el.dataset.value;
+        if(previous===next)return;
+        el.dataset.value=next;
+        // Update the accessible number immediately; never let animations hide the time.
+        el.textContent=next;
+        const bounds=el.getBoundingClientRect();
+        const visible=bounds.bottom>0&&bounds.top<window.innerHeight;
+        if(!previous || reducedMotion || document.hidden || !visible)return;
+        const sheets=[['flip-top-old',previous],['flip-bottom-old',previous],['flip-bottom-new',next]];
+        for(const [classname,value] of sheets){
+          const panel=document.createElement('span');panel.className='flip-sheet '+classname;
+          panel.setAttribute('aria-hidden','true');
+          const face=document.createElement('span');face.className='flip-face';face.textContent=value;
+          panel.appendChild(face);el.appendChild(panel);
+        }
+        // Clear temporary faces before the next second changes.
+        window.setTimeout(()=>{
+          el.querySelectorAll('.flip-sheet').forEach(panel=>panel.remove());
+        },650);
+      }
+      function tick(){
+        const delta=Math.max(0,target-Date.now());
+        const days=Math.floor(delta/86400000),hours=Math.floor(delta/3600000)%24;
+        const mins=Math.floor(delta/60000)%60,secs=Math.floor(delta/1000)%60;
+        $('days').textContent=days.toString();
+        $('hours').textContent=String(hours).padStart(2,'0');
+        updateFlipDigit('minutes',String(mins).padStart(2,'0'));
+        updateFlipDigit('seconds',String(secs).padStart(2,'0'));
+      }
+      tick();setInterval(tick,1000);
       const revealObserver=('IntersectionObserver'in window)?new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');revealObserver.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -25px 0px'}):null;
       document.querySelectorAll('.reveal').forEach(el=>{if(revealObserver&&!reducedMotion)revealObserver.observe(el);else el.classList.add('show')});
       const topButton=$('topButton');window.addEventListener('scroll',()=>topButton.classList.toggle('visible',window.scrollY>650),{passive:true});topButton.addEventListener('click',()=>window.scrollTo({top:0,behavior:reducedMotion?'auto':'smooth'}));
